@@ -21,15 +21,13 @@ $ composer install
 
 #Run application
 
-Now start the application (it does not start automatically, but if you want, uncomment the `` php bin/console server:run 192.168.33.89:8000 `` command in your Vagrant file to do so next time you 'reload' Vagrant):  
-
 ```bash
 $ composer start
 ```
 
 [Access application here](http://localhost:8090) 
 
-#Unit tests
+#Functional tests
 
 You can run tests with bash command ``` composer test ```
 
