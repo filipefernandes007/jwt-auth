@@ -25,9 +25,15 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     /** @var \Slim\App */
     protected $app;
 
+    protected $jwtSecret;
+
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
+
+        (new \Dotenv\Dotenv(__DIR__ . '/../../'))->load();
+
+        $this->jwtSecret = getenv('JWT_SECRET');
 
         // Use the application settings
         $settings = require __DIR__ . '/../../src/settings.php';

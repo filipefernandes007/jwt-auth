@@ -10,6 +10,8 @@
 
     class ApiTest extends BaseTestCase
     {
+        const URL = 'http://localhost:8090';
+
         protected static $jwt;
 
         protected function setUp() : void
@@ -21,7 +23,7 @@
         {
             $client  = new \GuzzleHttp\Client();
             $request = new \GuzzleHttp\Psr7\Request('POST',
-                                                    'http://localhost:8080/api/auth',
+                                                    self::URL . '/api/auth',
                                                     ['Content-Type' => 'application/json'],
                                                     json_encode(['username' => 'filipefernandes007',
                                                                  'pwd'      => '123']));
@@ -29,7 +31,7 @@
             $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) {
                 $result       = json_decode($response->getBody()->getContents());
                 self::$jwt    = $result->jwt;
-                $jwtSecretKey = $this->app->getContainer()->get('settings')['jwt.secret_key'];
+                $jwtSecretKey = $this->jwtSecret;
 
                 $this->assertEquals(200, $response->getStatusCode());
                 $this->assertObjectHasAttribute('jwt', $result);
@@ -44,7 +46,7 @@
         {
             $client  = new \GuzzleHttp\Client();
             $request = new \GuzzleHttp\Psr7\Request('GET',
-                                                    'http://localhost:8080/api/user/1',
+                                                    self::URL . '/api/user/1',
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . self::$jwt]);
 
@@ -68,7 +70,7 @@
 
             $client  = new \GuzzleHttp\Client();
             $request = new \GuzzleHttp\Psr7\Request('GET',
-                                                    'http://localhost:8080/api/user/1',
+                                                    self::URL . '/api/user/1',
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . $jwtChanged]);
 
@@ -95,7 +97,7 @@
 
             $client  = new \GuzzleHttp\Client();
             $request = new \GuzzleHttp\Psr7\Request('GET',
-                                                    'http://localhost:8080/api/user/1',
+                                                    self::URL . '/api/user/1',
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . $jwt]);
 

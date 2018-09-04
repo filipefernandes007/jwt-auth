@@ -30,7 +30,7 @@
             $user = $repository->findByCredentials($objectOnJsonRequest->username, $objectOnJsonRequest->pwd);
 
             if ($user) {
-                $jwtSecretKey = getenv('JWT_SECRET');;
+                $jwtSecretKey = getenv('JWT_SECRET');
                 $time         = time();
 
                 $playLoad = array(
