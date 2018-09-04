@@ -21,3 +21,7 @@ $container['logger'] = function ($c) {
 $container[\App\Repository\UserRepository::class] = function ($c) {
     return new \App\Repository\UserRepository($c);
 };
+
+$container[\App\Base\BaseApiController::class] = function ($c) {
+    return new \App\Base\BaseAPIController($c);
+};
