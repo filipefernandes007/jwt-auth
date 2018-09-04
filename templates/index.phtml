@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>JWT Auth</title>
+        <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+        <style>
+            body {
+                margin: 50px 0 0 0;
+                padding: 0;
+                width: 100%;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                text-align: center;
+                color: #aaa;
+                font-size: 18px;
+            }
+
+            h1 {
+                color: #719e40;
+                letter-spacing: -3px;
+                font-family: 'Lato', sans-serif;
+                font-size: 100px;
+                font-weight: 200;
+                margin-bottom: 0;
+            }
+
+            span {
+                font-size: x-small;
+            }
+
+            a {
+                color: mediumblue;
+                font-size: small;
+            }
+
+            .result {
+                color: black;
+                font-size: smaller;
+            }
+
+            #call_api_user_details {
+                display: none;
+            }
+
+        </style>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    </head>
+    <body>
+        <h1>JWT Auth</h1>
+
+        <div >
+            <form id="form_ask_jwt" method="post" action="/api/auth">
+                <input type="text" name="username" value="filipefernandes007">
+                <input type="password" name="pwd" value="123">
+                <input id="ask_for_jwt" type="submit" value="Ask for JWT">
+            </form>
+
+            <p><span>If you change jwt, you will get a 401 Unauthorized. Try it if you want.</span></p>
+
+            <textarea id="jwt" style="width: 17%;" rows="5"></textarea>
+        </div>
+
+        <a id="call_api_user_details" href="/api/user/1" data-id="1">(/api/user/1) Call User details with new jwt</a>
+
+        <p>
+        <div id="api_user_details_result_status" class="result"></div>
+        <div id="api_user_details_result" class="result"></div>
+        </p>
+
+    </body>
+    <script>
+        $(document).ready(function () {
+            $('#ask_for_jwt').on('click', function(event) {
+                event.preventDefault();
+
+                var data = JSON.stringify($("#form_ask_jwt").serializeFormJSON());
+
+                console.log(data);
+
+                $.ajax({
+                    url:        '/api/auth',
+                    type:       'POST',
+                    dataType:   'json',
+                    async:      true,
+                    data:       data,
+                    success: function(data, status) {
+                        console.log(status);
+                        console.log(data);
+
+                        $('#jwt').text(data.jwt);
+                        $('#call_api_user_details').show();
+                    },
+                    error : function(xhr, textStatus, errorThrown) {
+                        console.log(xhr);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                });
+            });
+
+            $('#call_api_user_details').on('click', function (event) {
+                event.preventDefault();
+
+                var id  = $(this).data('id');
+                var jwt = $('#jwt').val();
+
+                console.log('JWT :' + jwt);
+
+                $.ajax({
+                    url:        '/api/user/' + id,
+                    type:       'GET',
+                    dataType:   'json',
+                    async:      true,
+                    data:       null,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + jwt);
+                    },
+                    success: function(data, status) {
+                        console.log(status);
+                        console.log(data);
+
+                        $('#api_user_details_result_status').text(status);
+                        $('#api_user_details_result').text(JSON.stringify(data));
+                    },
+                    error : function(xhr, textStatus, errorThrown) {
+                        console.log(xhr);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+
+                        alert(xhr.status + ' ' + xhr.statusText);
+                    },
+                    /*
+                    statusCode: {
+                        401: function(xhr) {
+                            alert( "401 Unauthorized" );
+                        }
+                    }
+                    */
+                });
+            });
+        });
+
+        // thanks to https://jsfiddle.net/gabrieleromanato/bynaK/
+        $.fn.serializeFormJSON = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+    </script>
+</html>
