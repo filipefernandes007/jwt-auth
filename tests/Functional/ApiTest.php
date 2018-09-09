@@ -6,7 +6,7 @@
     namespace Tests\Functional;
 
 
-    use App\Utils\JWTUtils;
+    use App\Services\JWTService;
 
     class ApiTest extends BaseTestCase
     {
@@ -35,8 +35,7 @@
 
                 $this->assertEquals(200, $response->getStatusCode());
                 $this->assertObjectHasAttribute('jwt', $result);
-                $this->assertTrue(JWTUtils::validSignature(self::$jwt, $jwtSecretKey));
-
+                $this->assertTrue(JWTService::isSignatureValid(self::$jwt, $jwtSecretKey));
             });
 
             $promise->wait();
@@ -50,7 +49,7 @@
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . self::$jwt]);
 
-            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) {
+            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) use($request) {
                 $result = json_decode($response->getBody()->getContents());
 
                 $this->assertEquals(200, $response->getStatusCode());

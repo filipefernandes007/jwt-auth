@@ -2,7 +2,8 @@
 // Application middleware
 
 $app->add(new Tuupola\Middleware\JwtAuthentication([
-    'path'   => ['/api', '/admin'],
-    'ignore' => ['/api/auth'],
-    'secret' => $app->getContainer()->get('settings')['jwt.secret_key']
+    'path'      => ['/api', '/admin'],
+    'ignore'    => ['/api/auth'],
+    'attribute' => 'jwt',
+    'secret'    => getenv('JWT_SECRET')
 ]));

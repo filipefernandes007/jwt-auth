@@ -6,7 +6,7 @@
     namespace App\Controller;
 
     use App\Base\BaseApiController;
-    use App\Utils\JWTUtils;
+    use App\Services\JWTService;
     use Slim\Http\Request;
     use Slim\Http\Response;
 
@@ -26,22 +26,11 @@
             /** @var \App\Repository\UserRepository $repository */
             $repository = $this->container->get(\App\Repository\UserRepository::class);
 
-            /** @var \App\Model\UserModel $user */
+            /** @var \App\Model\UserModel|null $user */
             $user = $repository->findByCredentials($objectOnJsonRequest->username, $objectOnJsonRequest->pwd);
 
-            if ($user) {
-                $jwtSecretKey = getenv('JWT_SECRET');
-                $time         = time();
-
-                $playLoad = array(
-                    'iat'  => $time,
-                    'exp'  => $time + (60 * 60),
-                    'data' => ['id' => $user->getId(), 'username' => $user->getUsername()]
-                );
-
-                $jwt = \Firebase\JWT\JWT::encode($playLoad, $jwtSecretKey);
-
-                return $this->outputJson($response, ['jwt' => $jwt]);
+            if ($user !== null) {
+                return $this->outputJson($response, ['jwt' => (new JWTService())->generate($user->getId(), ['id' => $user->getId(), 'username' => $user->getUsername()])]);
             }
 
             return $this->outputJson($response, []);
@@ -56,19 +45,25 @@
          * @throws \Exception
          */
         public function getUser(Request $request, Response $response, array $args) : Response {
-            $jwtSecretKey = getenv('JWT_SECRET');
-            $jwt          = $request->getHeader('Authorization')[0];
-
             try {
-                $user    = new \App\Model\UserModel();
-                $decoded = JWTUtils::decodeJwt($jwt, $jwtSecretKey);
+                $user = new \App\Model\UserModel();
+                // or
+                // $jwtSecretKey = getenv('JWT_SECRET');
+                // $jwt          = $request->getHeader('Authorization')[0];
+                // $decoded      = JWTService::decode($jwt, $jwtSecretKey);
+                /** @var array $decoded */
+                $decoded = $request->getAttribute('jwt'); // from middleware Tuupola\Middleware\JwtAuthentication
 
-                if ($decoded->data && $decoded->data->id) {
+                /** @var integer $id */
+                $id = (int) (new JWTService())->getSubId((object) $decoded);
+
+                // remember that (int) null is 0
+                if ($id !== 0) {
                     /** @var \App\Repository\UserRepository $repository */
                     $repository = $this->container->get(\App\Repository\UserRepository::class);
 
                     /** @var \App\Model\UserModel $user */
-                    $user = $repository->find($decoded->data->id);
+                    $user = $repository->find($id);
                 }
 
                 return $this->outputJson($response, $user->toArray());
