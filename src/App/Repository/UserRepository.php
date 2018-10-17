@@ -94,11 +94,8 @@
                 /** @var \PDOStatement $stm */
                 $stm = $db->prepare($sql);
 
-                $id  = $user->getId();
-                $pwd = $user->getPassword();
-
-                $stm->bindValue(':id', $id);
-                $stm->bindValue(':password', $pwd);
+                $stm->bindValue(':id', $user->getId(), \PDO::PARAM_INT);
+                $stm->bindValue(':password', $user->getPassword(), \PDO::PARAM_STR);
 
                 $result = $stm->execute();
             } catch (\PDOException $e) {
