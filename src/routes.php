@@ -17,3 +17,4 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 // API
 $app->post('/api/auth', \App\Controller\ApiController::class . ':auth');
 $app->get('/api/user/{id}', \App\Controller\ApiController::class . ':getUser');
+$app->post('/api/user/change-pwd/{id}', \App\Controller\ApiController::class . ':changePassword');

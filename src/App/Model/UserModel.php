@@ -93,7 +93,8 @@
         public function toArray() : array {
             return [
                 'id'       => $this->id,
-                'username' => $this->username
+                'username' => $this->username,
+                //'pwd'      => $this->password
             ];
         }
 

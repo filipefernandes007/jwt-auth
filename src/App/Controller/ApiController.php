@@ -72,4 +72,45 @@
                 return $this->outputJson($response, ['error' => $e->getMessage()]);
             }
         }
+
+        /**
+         * @param Request  $request
+         * @param Response $response
+         * @param array    $args
+         * @return Response
+         * @throws \Interop\Container\Exception\ContainerException
+         * @throws \Exception
+         */
+        public function changePassword(Request $request, Response $response, array $args) : Response {
+            $arrayResult = $request->getParsedBody();
+
+            if (!isset($arrayResult['pwd'])) {
+                return new Response(422, null, null);
+            }
+
+            $id   = (int) $request->getAttribute('id');
+            $pwd  = $arrayResult['pwd'];
+            $user = null;
+
+            try {
+                // remember that (int) null is 0
+                if ($id !== 0) {
+                    /** @var \App\Repository\UserRepository $repository */
+                    $repository = $this->container->get(\App\Repository\UserRepository::class);
+
+                    /** @var \App\Model\UserModel $user */
+                    $user = $repository->find($id);
+
+                    if ($user !== null) {
+                        $user->setPassword(password_hash($pwd, PASSWORD_BCRYPT));
+                        $repository->save($user);
+                    }
+                }
+
+            } catch (\Exception $e) {
+                return $this->outputJson($response, ['error' => $e->getMessage()]);
+            }
+
+            return $this->outputJson($response, $user->toArray());
+        }
     }
