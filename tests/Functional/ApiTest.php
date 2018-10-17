@@ -6,7 +6,9 @@
     namespace Tests\Functional;
 
 
+    use App\Repository\UserRepository;
     use App\Services\JWTService;
+    use App\Services\PasswordService;
 
     class ApiTest extends BaseTestCase
     {
@@ -14,9 +16,14 @@
 
         protected static $jwt;
 
+        /** @var \App\Repository\UserRepository */
+        protected static $userRepository;
+
         protected function setUp() : void
         {
             echo "\n" . $this->getName();
+
+            self::$userRepository = $this->app->getContainer()->get(\App\Repository\UserRepository::class);
         }
 
         public function testApiAuth() : void
@@ -55,6 +62,32 @@
                 $this->assertEquals(200, $response->getStatusCode());
                 $this->assertEquals(1, $result->id);
                 $this->assertEquals('filipefernandes007', $result->username);
+            });
+
+            $promise->wait();
+        }
+
+        public function testChangePassword() : void {
+            $pwd = '123';
+
+            $client  = new \GuzzleHttp\Client();
+            $request = new \GuzzleHttp\Psr7\Request('POST',
+                                                    self::URL . '/api/user/change-pwd/1',
+                                                    ['Content-Type'  => 'application/json',
+                                                     'Authorization' => 'Bearer ' . self::$jwt],
+                                                     json_encode(['pwd' => $pwd]));
+
+            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) use($pwd) {
+                $result = json_decode($response->getBody()->getContents());
+
+                $this->assertEquals(200, $response->getStatusCode());
+                $this->assertEquals(1, $result->id);
+                $this->assertEquals('filipefernandes007', $result->username);
+
+                $user = self::$userRepository->find($result->id);
+
+                $this->assertTrue(PasswordService::verify($pwd, $user->getPassword()));
+
             });
 
             $promise->wait();

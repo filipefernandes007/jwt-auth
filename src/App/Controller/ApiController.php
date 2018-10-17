@@ -7,6 +7,7 @@
 
     use App\Base\BaseApiController;
     use App\Services\JWTService;
+    use App\Services\PasswordService;
     use Slim\Http\Request;
     use Slim\Http\Response;
 
@@ -22,6 +23,12 @@
          */
         public function auth(Request $request, Response $response, array $args) : Response {
             $objectOnJsonRequest = json_decode($request->getBody());
+
+            if (!property_exists($objectOnJsonRequest, 'username') ||
+                !property_exists($objectOnJsonRequest, 'pwd')) {
+
+                return new Response(422, null, null);
+            }
 
             /** @var \App\Repository\UserRepository $repository */
             $repository = $this->container->get(\App\Repository\UserRepository::class);
@@ -82,14 +89,14 @@
          * @throws \Exception
          */
         public function changePassword(Request $request, Response $response, array $args) : Response {
-            $arrayResult = $request->getParsedBody();
+            $objectOnJsonRequest = json_decode($request->getBody());
 
-            if (!isset($arrayResult['pwd'])) {
+            if (!property_exists($objectOnJsonRequest, 'pwd')) {
                 return new Response(422, null, null);
             }
 
             $id   = (int) $request->getAttribute('id');
-            $pwd  = $arrayResult['pwd'];
+            $pwd  = $objectOnJsonRequest->pwd;
             $user = null;
 
             try {
@@ -102,7 +109,7 @@
                     $user = $repository->find($id);
 
                     if ($user !== null) {
-                        $user->setPassword(password_hash($pwd, PASSWORD_BCRYPT));
+                        $user->setPassword(PasswordService::encrypt($pwd));
                         $repository->save($user);
                     }
                 }

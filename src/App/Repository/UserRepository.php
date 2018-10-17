@@ -7,6 +7,7 @@
 
 
     use App\Model\UserModel;
+    use App\Services\PasswordService;
 
     class UserRepository
     {
@@ -73,7 +74,7 @@
             /** @var UserModel $user */
             $user = $this->findByUsername($username);
 
-            if ($user !== null && !password_verify($password, $user->getPassword())) {
+            if ($user !== null && !PasswordService::verify($password, $user->getPassword())) {
                 return null;
             }
 
