@@ -11,15 +11,16 @@
 
     class UserRepository
     {
-        /** @var \Slim\Container */
-        protected $container;
+        /** @var \PDO */
+        protected $pdo;
 
         /**
-         * User constructor.
+         * UserRepository constructor.
          * @param \Slim\Container $container
+         * @throws \Interop\Container\Exception\ContainerException
          */
         public function __construct(\Slim\Container $container) {
-            $this->container = $container;
+            $this->pdo = $container->get('settings')['db'];
         }
 
         /**
@@ -28,13 +29,10 @@
          * @throws \Interop\Container\Exception\ContainerException
          */
         public function find(int $id) : UserModel {
-            /** @var \PDO $db */
-            $db  = $this->container->get('settings')['db'];
-
             $sql = 'SELECT * FROM user WHERE id = :id';
 
             /** @var \PDOStatement $stm */
-            $stm = $db->prepare($sql);
+            $stm = $this->pdo->prepare($sql);
 
             $stm->bindParam(':id', $id, \PDO::PARAM_INT);
             $stm->execute();
@@ -49,13 +47,10 @@
          * @throws \Interop\Container\Exception\ContainerException
          */
         public function findByUsername(string $username) : UserModel {
-            /** @var \PDO $db */
-            $db  = $this->container->get('settings')['db'];
-
             $sql = 'SELECT * FROM user WHERE username = :username LIMIT 1';
 
             /** @var \PDOStatement $stm */
-            $stm = $db->prepare($sql);
+            $stm = $this->pdo->prepare($sql);
 
             $stm->bindParam(':username', $username, \PDO::PARAM_STR);
             $stm->execute();
@@ -87,13 +82,11 @@
          * @throws \Interop\Container\Exception\ContainerException
          */
         public function save(UserModel $user) : bool {
-            /** @var \PDO $db */
-            $db  = $this->container->get('settings')['db'];
             $sql = "UPDATE user SET password = :password WHERE id = :id";
 
             try {
                 /** @var \PDOStatement $stm */
-                $stm = $db->prepare($sql);
+                $stm = $this->pdo->prepare($sql);
 
                 $stm->bindValue(':id', $user->getId(), \PDO::PARAM_INT);
                 $stm->bindValue(':password', $user->getPassword(), \PDO::PARAM_STR);
