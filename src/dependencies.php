@@ -22,6 +22,8 @@ $container['config'] = function (\Slim\Container $c) use($app) {
     return new \App\Common\Config($app);
 };
 
+//(new \App\Common\Config($app))->setUpDependencyInjectionInAllPDORepositories($container);
+
 $container[\App\Repository\UserRepository::class] = function (\Slim\Container $c) {
     return new \App\Repository\UserRepository($c->get('settings')['db']);
 };

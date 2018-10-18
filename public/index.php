@@ -1,7 +1,8 @@
 <?php
 
 define('DS', DIRECTORY_SEPARATOR);
-define("ROOT", realpath('..') . DS, true);
+define('ROOT', realpath('..') . DS, true);
+define('APP', __DIR__ . '/../src/App', true);
 
 if (PHP_SAPI == 'cli-server') {
     // To help the built-in PHP dev server, check if the request was actually for

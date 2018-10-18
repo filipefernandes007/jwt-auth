@@ -49,7 +49,7 @@
             $promise->wait();
         }
 
-        public function testRequestWithJwt() : void
+        public function testGetUser() : void
         {
             $client  = new \GuzzleHttp\Client();
             $request = new \GuzzleHttp\Psr7\Request('GET',

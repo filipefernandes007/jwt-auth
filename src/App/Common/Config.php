@@ -8,6 +8,8 @@
 
     namespace App\Common;
 
+    use App\Base\BasePDORepository;
+
     /**
      * Class Config
      * @package App\Common
@@ -17,13 +19,16 @@
         /** @var \Slim\App */
         protected $app;
 
+        /** @var \Slim\Container */
+        protected $container;
+
         /**
          * Config constructor.
-         * @param \Slim\App $app
+         * @param \Slim\App       $app
          */
         public function __construct(\Slim\App $app)
         {
-            $this->app = $app;
+            $this->app       = $app;
         }
 
         public function setUpRoutes() : void {
@@ -52,6 +57,21 @@
 
                         }
                     }
+                }
+            }
+        }
+
+        // TODO this don't work for composer test
+        public function setUpDependencyInjectionInAllPDORepositories(&$c) : void
+        {
+            foreach (glob(APP . '/Repository/*.php') as $file) {
+                $classnName = explode('src/', $file);
+                $class      = str_replace('.php', '', str_ireplace('/', '\\', $classnName[1]));
+
+                if (is_subclass_of('\\' . $class, BasePDORepository::class)) {
+                    $c[$class] = function (\Slim\Container $c) use ($class) {
+                        return new $class($c->get('settings')['db']);
+                    };
                 }
             }
         }
