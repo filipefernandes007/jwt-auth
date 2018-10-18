@@ -7,9 +7,9 @@
 
 
     use App\Model\UserModel;
-    use App\Repository\UserRepository;
     use App\Services\JWTService;
     use App\Services\PasswordService;
+    use Tests\BaseTestCase;
 
     class ApiTest extends BaseTestCase
     {

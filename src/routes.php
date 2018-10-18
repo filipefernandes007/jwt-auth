@@ -2,7 +2,6 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Utils\JWTUtils;
 
 // Routes
 
@@ -14,7 +13,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
     return $this->renderer->render($response, 'index.phtml', $args);
 });
 
+$app->getContainer()->get('config')->setUpRoutes();
+
 // API
-$app->post('/api/auth', \App\Controller\ApiController::class . ':auth');
-$app->get('/api/user/{id}', \App\Controller\ApiController::class . ':getUser');
-$app->post('/api/user/change-pwd/{id}', \App\Controller\ApiController::class . ':changePassword');
+//$app->post('/api/auth', \App\Controller\ApiController::class . ':auth');
+//$app->get('/api/user/{id}', \App\Controller\ApiController::class . ':getUser');
+//$app->post('/api/user/change-pwd/{id}', \App\Controller\ApiController::class . ':changePassword');

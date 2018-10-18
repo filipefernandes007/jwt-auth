@@ -40,7 +40,7 @@ curl -X GET http://localhost:8090/api/user/1 \
 
 curl -X GET http://localhost:8090/api/user/1 \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmaWxpcGVmZXJuYW5kZXMwMDctand0fDEiLCJpc3MiOiJcL2F1dGgiLCJpYXQiOjE1Mzk4MDgyNDAsImV4cCI6MTUzOTgxMTg0MCwiZGF0YSI6eyJpZCI6MSwidXNlcm5hbWUiOiJmaWxpcGVmZXJuYW5kZXMwMDcifX0.JFZR1VTBLE36sm5a5vd8otwkLlv8FXqqmlAuDlCB-fUfT9-d5QX7M8Z35lfw21ZeozHoKqGbe_NNiD11WKGvVA"
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmaWxpcGVmZXJuYW5kZXMwMDctand0fDEiLCJpc3MiOiJcL2F1dGgiLCJpYXQiOjE1Mzk4NzQ1MjUsImV4cCI6MTUzOTg3ODEyNSwiZGF0YSI6eyJpZCI6MSwidXNlcm5hbWUiOiJmaWxpcGVmZXJuYW5kZXMwMDcifX0.3conBhpJ9eX3mup3tptjpW_OdL70uB-zUEUyF4haaRkfbBAEDNF41jLd6fmd2W_7EqUq6inX5EnELnQtXeqx8g"
 ```
 
 POST /api/user/change-pwd/<id> :
@@ -53,7 +53,7 @@ curl -X POST http://localhost:8090/api/user/change-pwd/<id> \
 curl -X POST http://localhost:8090/api/user/change-pwd/1 \
 -d '{"pwd":"123"}' \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmaWxpcGVmZXJuYW5kZXMwMDctand0fDEiLCJpc3MiOiJcL2F1dGgiLCJpYXQiOjE1Mzk4MDgyNDAsImV4cCI6MTUzOTgxMTg0MCwiZGF0YSI6eyJpZCI6MSwidXNlcm5hbWUiOiJmaWxpcGVmZXJuYW5kZXMwMDcifX0.JFZR1VTBLE36sm5a5vd8otwkLlv8FXqqmlAuDlCB-fUfT9-d5QX7M8Z35lfw21ZeozHoKqGbe_NNiD11WKGvVA"
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmaWxpcGVmZXJuYW5kZXMwMDctand0fDEiLCJpc3MiOiJcL2F1dGgiLCJpYXQiOjE1Mzk4NzQ1MjUsImV4cCI6MTUzOTg3ODEyNSwiZGF0YSI6eyJpZCI6MSwidXNlcm5hbWUiOiJmaWxpcGVmZXJuYW5kZXMwMDcifX0.3conBhpJ9eX3mup3tptjpW_OdL70uB-zUEUyF4haaRkfbBAEDNF41jLd6fmd2W_7EqUq6inX5EnELnQtXeqx8g"
 ```
 
 [Access application here](http://localhost:8090) 

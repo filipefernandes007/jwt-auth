@@ -1,0 +1,12 @@
+ApiController:
+  actions:
+    /api/auth:
+      method: POST
+      action: auth
+    /api/user/{id}:
+      method: GET
+      action: getUser
+    /api/user/change-pwd/{id}:
+      method: POST
+      action: changePassword
+

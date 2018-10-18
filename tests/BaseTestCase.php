@@ -1,11 +1,14 @@
 <?php
 
-namespace Tests\Functional;
+namespace Tests;
 
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\Environment;
+
+\define('DS', DIRECTORY_SEPARATOR);
+\define('ROOT', realpath('') . DS, true);
 
 /**
  * This is an example class that shows how you could set up a method that
@@ -31,26 +34,26 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        (new \Dotenv\Dotenv(__DIR__ . '/../../'))->load();
+        (new \Dotenv\Dotenv(__DIR__ . '/../'))->load();
 
         $this->jwtSecret = getenv('JWT_SECRET');
 
         // Use the application settings
-        $settings = require __DIR__ . '/../../src/settings.php';
+        $settings = require __DIR__ . '/../src/settings.php';
 
         // Instantiate the application
         $app = new App($settings);
 
         // Set up dependencies
-        require __DIR__ . '/../../src/dependencies.php';
+        require __DIR__ . '/../src/dependencies.php';
 
         // Register middleware
         if ($this->withMiddleware) {
-            require __DIR__ . '/../../src/middleware.php';
+            require __DIR__ . '/../src/middleware.php';
         }
 
         // Register routes
-        require __DIR__ . '/../../src/routes.php';
+        require __DIR__ . '/../src/routes.php';
 
         $this->app = $app;
     }
