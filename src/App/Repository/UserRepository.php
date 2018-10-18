@@ -6,29 +6,22 @@
     namespace App\Repository;
 
 
+    use App\Base\BaseModel;
+    use App\Base\BasePDORepository;
     use App\Model\UserModel;
     use App\Services\PasswordService;
 
-    class UserRepository
+    /**
+     * Class UserRepository
+     * @package App\Repository
+     */
+    class UserRepository extends BasePDORepository
     {
-        /** @var \PDO */
-        protected $pdo;
-
-        /**
-         * UserRepository constructor.
-         * @param \Slim\Container $container
-         * @throws \Interop\Container\Exception\ContainerException
-         */
-        public function __construct(\Slim\Container $container) {
-            $this->pdo = $container->get('settings')['db'];
-        }
-
         /**
          * @param int $id
          * @return UserModel
-         * @throws \Interop\Container\Exception\ContainerException
          */
-        public function find(int $id) : UserModel {
+        public function find(int $id) : ?BaseModel {
             $sql = 'SELECT * FROM user WHERE id = :id';
 
             /** @var \PDOStatement $stm */
@@ -77,11 +70,10 @@
         }
 
         /**
-         * @param UserModel $user
+         * @param UserModel|BaseModel $user
          * @return bool
-         * @throws \Interop\Container\Exception\ContainerException
          */
-        public function save(UserModel $user) : bool {
+        public function save(BaseModel $user) : bool {
             $sql = "UPDATE user SET password = :password WHERE id = :id";
 
             try {

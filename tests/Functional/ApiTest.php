@@ -6,6 +6,7 @@
     namespace Tests\Functional;
 
 
+    use App\Model\UserModel;
     use App\Repository\UserRepository;
     use App\Services\JWTService;
     use App\Services\PasswordService;
@@ -84,6 +85,7 @@
                 $this->assertEquals(1, $result->id);
                 $this->assertEquals('filipefernandes007', $result->username);
 
+                /** @var UserModel $user */
                 $user = self::$userRepository->find($result->id);
 
                 $this->assertTrue(PasswordService::verify($pwd, $user->getPassword()));
@@ -93,9 +95,6 @@
             $promise->wait();
         }
 
-        /**
-         * @throws \GuzzleHttp\Exception\GuzzleException
-         */
         public function testFailJwtWasChanged() : void
         {
             $jwtChanged = substr_replace(self::$jwt,'x',-1);
@@ -106,13 +105,7 @@
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . $jwtChanged]);
 
-            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) {
-                $result = json_decode($response->getBody()->getContents());
-
-                $this->assertEquals(200, $response->getStatusCode());
-                $this->assertEquals(1, $result->id);
-                $this->assertEquals('filipefernandes007', $result->username);
-            });
+            $promise = $client->sendAsync($request);
 
             try {
                 $promise->wait();
@@ -133,13 +126,7 @@
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . $jwt]);
 
-            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) {
-                $result = json_decode($response->getBody()->getContents());
-
-                $this->assertEquals(200, $response->getStatusCode());
-                $this->assertEquals(1, $result->id);
-                $this->assertEquals('filipefernandes007', $result->username);
-            });
+            $promise = $client->sendAsync($request);
 
             try {
                 $promise->wait();

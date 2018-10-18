@@ -6,11 +6,14 @@
     namespace App\Model;
 
 
-    class UserModel
-    {
-        /** @var int|null */
-        private $id;
+    use App\Base\BaseModel;
 
+    /**
+     * Class UserModel
+     * @package App\Model
+     */
+    class UserModel extends BaseModel
+    {
         /** @var string */
         private $username;
 
@@ -28,25 +31,6 @@
             $this->id       = $id;
             $this->username = $username;
             $this->password = $password;
-        }
-
-        /**
-         * @return int
-         */
-        public function getId() : int
-        {
-            return $this->id;
-        }
-
-        /**
-         * @param int $id
-         * @return UserModel
-         */
-        public function setId(int $id) : UserModel
-        {
-            $this->id = $id;
-
-            return $this;
         }
 
         /**
