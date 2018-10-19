@@ -37,7 +37,7 @@
     },
     "scripts": {
         "start": "php -S localhost:8090 -t public",
-        "test": "phpunit --debug --colors=always"
+        "test": "phpunit --debug --colors=always --verbose"
     }
 
 }

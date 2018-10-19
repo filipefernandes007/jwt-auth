@@ -57,7 +57,7 @@
                                                     ['Content-Type'  => 'application/json',
                                                      'Authorization' => 'Bearer ' . self::$jwt]);
 
-            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) use($request) {
+            $promise = $client->sendAsync($request)->then(function (\GuzzleHttp\Psr7\Response $response) {
                 $result = json_decode($response->getBody()->getContents());
 
                 $this->assertEquals(200, $response->getStatusCode());

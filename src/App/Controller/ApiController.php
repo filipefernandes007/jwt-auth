@@ -76,6 +76,8 @@
                 return $this->outputJson($response, $user->toArray());
 
             } catch (\Firebase\JWT\SignatureInvalidException $e) {
+                $this->container->get('logger')->error("JWT '/' getUser : {$e->getMessage()}");
+
                 return $this->outputJson($response, ['error' => $e->getMessage()]);
             }
         }
@@ -115,6 +117,8 @@
                 }
 
             } catch (\Exception $e) {
+                $this->container->get('logger')->error("JWT '/' changePassword : {$e->getMessage()}");
+
                 return $this->outputJson($response, ['error' => $e->getMessage()]);
             }
 

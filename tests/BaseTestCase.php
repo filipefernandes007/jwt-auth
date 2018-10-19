@@ -34,26 +34,9 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        (new \Dotenv\Dotenv(__DIR__ . '/../'))->load();
+        require __DIR__ . '/../public/index.php';
 
         $this->jwtSecret = getenv('JWT_SECRET');
-
-        // Use the application settings
-        $settings = require __DIR__ . '/../src/settings.php';
-
-        // Instantiate the application
-        $app = new App($settings);
-
-        // Set up dependencies
-        require __DIR__ . '/../src/dependencies.php';
-
-        // Register middleware
-        if ($this->withMiddleware) {
-            require __DIR__ . '/../src/middleware.php';
-        }
-
-        // Register routes
-        require __DIR__ . '/../src/routes.php';
 
         $this->app = $app;
     }
