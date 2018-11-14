@@ -29,7 +29,7 @@
          * @return LoggerResult
          */
         public static function instance(Logger $logger) : LoggerResult {
-                 if (self::$instance === null) {
+            if (self::$instance === null) {
                 self::$instance = new static;
             }
 
