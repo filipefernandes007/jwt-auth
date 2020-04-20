@@ -1,8 +1,6 @@
 
 #JWT Auth - _Small example on how to use JWT to interact with your API_ 
 
-This project allows you to shrink your links. It is a Slim PHP 3.x based application. Feel free to test.
-
 #Requirements
 
 * PHP 7.1
