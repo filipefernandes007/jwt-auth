@@ -1,14 +1,14 @@
 
-#JWT Auth - _Small example on how to use JWT to interact with your API_ 
+# JWT Auth - _Small example on how to use JWT to interact with your API_ 
 
-#Requirements
+# Requirements
 
 * PHP 7.1
 * [Sqlite3](https://www.sqlite.org/index.html)
 * [composer - Dependency Manager for PHP](https://getcomposer.org/download/) 
 * [ext-pdo-sqlite](http://php.net/manual/en/ref.pdo-sqlite.php)
 
-#Install
+# Install
 
 ```bash
 $ git clone https://github.com/filipefernandes007/jwt-auth.git
@@ -17,13 +17,13 @@ $ composer self-update
 $ composer install
 ```
 
-#Run application
+# Run application
 
 ```bash
 $ composer start
 ```
 
-#Routes
+# Routes
 
 POST /api/auth : {"jwt":"some valid jwt"}
 ```
@@ -56,7 +56,7 @@ curl -X POST http://localhost:8090/api/user/change-pwd/1 \
 
 [Access application here](http://localhost:8090) 
 
-#Functional tests
+# Functional tests
 
 You can run tests with bash command ``` composer test ```
 
